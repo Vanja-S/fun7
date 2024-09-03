@@ -26,9 +26,9 @@ jobs:
       - name: Build Docker image
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
-          docker build -t ghcr.io/${{ github.repository }}/fun7:${SHORT_COMMIT_SHA} .
+          docker build -t ghcr.io/vanja-s/fun7:${SHORT_COMMIT_SHA} .
 
       - name: Push Docker image
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
-          docker push ghcr.io/${{ github.repository }}/fun7:${SHORT_COMMIT_SHA}
+          docker push ghcr.io/vanja-s/fun7:${SHORT_COMMIT_SHA}
