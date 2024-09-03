@@ -1,0 +1,7 @@
+# Docker compose is used for easier testing purposes, see why here - https://stackoverflow.com/questions/39216830/how-could-i-ping-my-docker-container-from-my-host
+
+services:
+  cts:
+    image: fun7:latest
+    ports:
+      - 8000:8000
