@@ -4,7 +4,6 @@ WORKDIR /app
 
 COPY . /app/
 
-RUN ls
 RUN pip install --no-cache-dir --upgrade .
 
 EXPOSE 8000
