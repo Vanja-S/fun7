@@ -20,7 +20,8 @@ jobs:
         env:
           GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_ACTIONS_SECRET_B64 }}
         run: |
-          echo "${GCP_SERVICE_ACCOUNT_KEY}" | gcloud auth activate-service-account --key-file=-
+          echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 --decode > /tmp/gcp-key.json
+          gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
           gcloud --quiet auth configure-docker
 
       - name: Build Docker image
@@ -32,3 +33,7 @@ jobs:
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
           docker push gcr.io/compact-marker-434520-k0/fun7-cts:${SHORT_COMMIT_SHA}
+      
+      - name: Cleanup
+        if: always()
+        run: rm /tmp/gcp-key.json
