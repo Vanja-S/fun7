@@ -14,9 +14,9 @@ Fun7 CTS backend service.
 
 3. Describe how you would set up infrastructure to be resilient to failures of compute nodes and scale automatically in case of increased CPU. You can also provide configuration files for the infrastructure/tools you would use.
 
-    For this simple use case the solution uses GCP's Cloud run service. The service is managed by Google Kubernetes Engine (GKE), which orchestrates containers across multiple nodes in a cluster. If one node fails, Kubernetes automatically redistributes the affected containers to other healthy nodes in the cluster, that alongside multi-zone deployments allow for redundancy.
+    For this simple use case, the solution uses GCP's Cloud run service. The service is managed by Google Kubernetes Engine (GKE), which orchestrates containers across multiple nodes in a cluster. If one node fails, Kubernetes automatically redistributes the affected containers to other healthy nodes in the cluster, which alongside multi-zone deployments allows for redundancy.
 
-    It also offers autoscalling to accomodate traffic spikes, where CPU is automatically allocated during request processing. Each Cloud run instance can handle multiple requests concurently (up to 80), which is does automatically before spinning up another instance. We can also manually set the minimum number of instances (not implemented here as it runs a passive cost) to help with sudden traffic spikes and decreasing response time due to cold starts.
+    It also offers autoscaling to accommodate traffic spikes, where the CPU is automatically allocated during request processing. Each Cloud run instance can handle multiple requests concurrently (up to 80), which is done automatically before spinning up another instance. We can also manually set the minimum number of instances (not implemented here as it runs a passive cost) to help with sudden traffic spikes and decreasing response time due to cold starts.
 
 4. Every merge/commit to master should also automatically deploy a new version of CTS.
 
