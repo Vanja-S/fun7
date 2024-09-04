@@ -37,6 +37,6 @@ When we are ready, we merge the branch into main, which will build the applicati
 
 ## Architecture
 
-The CTS itself is a basic FastAPI implementation, with the ability to be dockerized. The docker image is created on every commit (any branch) and every merge to main (which are always tagged as latest). The GCP's Cloud run resource is used as a service to host these dockerized applications. They are managed using terraform - which itself uses the GCP's cloud storage to store its state (downloaded and reuploaded in the CI for simplicity, there is a backend option in Terraform but is lacking in security mesuares for handling secrets).
+The CTS itself is a basic FastAPI implementation, with the ability to be dockerized. The docker image is created on every commit (any branch) and every merge to main (which are always tagged as latest). The GCP's Cloud run resource is used as a service to host these dockerized applications. They are managed using terraform - which itself uses the GCP's cloud storage to store its state (downloaded and reuploaded in the CI for simplicity, there is a backend option in Terraform but is lacking in security mesuares for handling secrets). The credentials are handled as per best practices - GitHub actions secrets and terraform sensitive variables.
 
 ![image](https://github.com/user-attachments/assets/d15e3313-5db3-4916-b777-fafc63f8e7ed)
