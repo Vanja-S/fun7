@@ -26,7 +26,7 @@ resource "google_storage_bucket" "fun7_cts_terraform_state" {
   uniform_bucket_level_access = true
 }
 
-resource "google_cloud_run_v2_service" "cts_north_america" {
+resource "google_cloud_run_v2_service" "cts-north-america" {
   name     = "cts_north_america-service"
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
@@ -41,7 +41,7 @@ resource "google_cloud_run_v2_service" "cts_north_america" {
   }
 }
 
-resource "google_cloud_run_v2_service" "cts_asia" {
+resource "google_cloud_run_v2_service" "cts-asia" {
   name     = "cts_asia-service"
   location = "asia-east1"
   ingress  = "INGRESS_TRAFFIC_ALL"
@@ -56,7 +56,7 @@ resource "google_cloud_run_v2_service" "cts_asia" {
   }
 }
 
-resource "google_cloud_run_v2_service" "cts_europe" {
+resource "google_cloud_run_v2_service" "cts-europe" {
   name     = "cts_europe-service"
   location = "europe-central2"
   ingress  = "INGRESS_TRAFFIC_ALL"
