@@ -29,9 +29,11 @@ jobs:
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
           docker build -t gcr.io/compact-marker-434520-k0/fun7-cts:${SHORT_COMMIT_SHA} .
 
-      - name: Docker Login
+      - name: Docker 
+        env:
+          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_ACTIONS_SECRET_B64 }}
         run: |
-          cat /tmp/gcp-key.json | docker login -u _json_key_base64 --password-stdin https://europe-central2-docker.pkg.dev
+          echo "${GCP_SERVICE_ACCOUNT_KEY}" | docker login -u _json_key_base64 --password-stdin https://europe-central2-docker.pkg.dev
 
       - name: Push Docker image
         run: |
