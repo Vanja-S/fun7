@@ -33,6 +33,7 @@ jobs:
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
           docker tag europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:${SHORT_COMMIT_SHA} \
             europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest
+          
 
       - name: Push Docker image
         run: |

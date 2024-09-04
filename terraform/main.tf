@@ -4,7 +4,14 @@ terraform {
       source  = "hashicorp/google"
       version = "6.0.1"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.2"
+    }
   }
+}
+
+provider "random" {
 }
 
 provider "google" {
@@ -26,12 +33,16 @@ resource "google_storage_bucket" "fun7_cts_terraform_state" {
   uniform_bucket_level_access = true
 }
 
+resource "random_uuid" "revision_uuid" {}
+
 resource "google_cloud_run_v2_service" "cts_north_america" {
   name     = "cts-north-america-service"
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
+
   template {
+    revision = random_uuid.revision_uuid.result
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
@@ -55,6 +66,7 @@ resource "google_cloud_run_v2_service" "cts_asia" {
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
+    revision = random_uuid.revision_uuid.result
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
@@ -78,6 +90,7 @@ resource "google_cloud_run_v2_service" "cts_europe" {
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
+    revision = random_uuid.revision_uuid.result
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
