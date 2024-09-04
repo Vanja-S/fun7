@@ -5,6 +5,10 @@ on:
   push:
     branches:
     - main
+  workflow_run:
+    workflows: ["Docker Image CI"]
+    types:
+      - completed
 
 env:
   TF_LOG: INFO
