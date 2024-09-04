@@ -34,7 +34,7 @@ resource "google_storage_bucket" "fun7_cts_terraform_state" {
 }
 
 resource "random_string" "revision_random_string" {
-  length  = 32
+  length  = 16
   special = false
   upper   = false
   numeric = false
@@ -45,9 +45,8 @@ resource "google_cloud_run_v2_service" "cts_north_america" {
   location = "us-central1"
   ingress  = "INGRESS_TRAFFIC_ALL"
 
-
   template {
-    revision = random_string.revision_random_string.result
+    revision = "cts-north-america-service-${random_string.revision_random_string.result}"
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
@@ -71,7 +70,7 @@ resource "google_cloud_run_v2_service" "cts_asia" {
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
-    revision = random_string.revision_random_string.result
+    revision = "cts-asia-service-${random_string.revision_random_string.result}"
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
@@ -95,7 +94,7 @@ resource "google_cloud_run_v2_service" "cts_europe" {
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
-    revision = random_string.revision_random_string.result
+    revision = "cts-europe-service-${random_string.revision_random_string.result}"
     containers {
       image = "europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest"
       ports {
