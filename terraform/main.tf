@@ -34,10 +34,10 @@ resource "google_storage_bucket" "fun7_cts_terraform_state" {
 }
 
 resource "random_string" "revision_random_string" {
-  length           = 16
-  special          = false
-  override_special = "-"
-  upper            = false
+  length  = 32
+  special = false
+  upper   = false
+  numeric = false
 }
 
 resource "google_cloud_run_v2_service" "cts_north_america" {
