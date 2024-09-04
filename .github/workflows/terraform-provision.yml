@@ -2,9 +2,6 @@ name: Terraform Provision
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-    - main
   workflow_run:
     workflows: ["Docker Image CI"]
     types:

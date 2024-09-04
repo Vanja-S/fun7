@@ -26,4 +26,15 @@ Fun7 CTS backend service.
 
 ## How to build
 
-This project uses poetry for Python venv and dependency management. To use it, check out their docs [here](https://python-poetry.org/docs/)
+This project uses poetry for Python venv and dependency management. To use it, check out their docs [here](https://python-poetry.org/docs/). TL;DR we need to execute the following commands:
+
+1. `poetry init` - which will init the venv and download the Python dependencies needed for development.
+2. `fastapi dev main.py` - which will use FastAPI (the underlying Python framework) to spin up a dev server instance.
+
+We can create a new branch from main, develop on it, and when we commit (and push) to it, a new instance of the dockerized application will be created for us with the tag being the commit's short SHA. We can then locally use that image for development and debugging.
+
+When we are ready, we merge the branch into main, which will build the application, tag it as `latest`, and then deploy the infrastructure - if it changed - otherwise it will only deploy a new revision of the Cloud run resources to ensure they are using the latest image (not cached latest) - thus _Terraform Provision_ is triggered by the completion of _Docker Image CI_ to prevent race conditions.
+
+## Architecture
+
+The CTS itself is a basic FastAPI implementation, with the ability to be dockerized. The docker image is created on every commit (any branch) and every merge to main (which are always tagged as latest). The GCP's Cloud run resource is used as a service to host these dockerized applications. They are managed using terraform - which itself uses the GCP's cloud storage to store its state (downloaded and reuploaded in the CI for simplicity, there is a backend option in Terraform but is lacking in security mesuares for handling secrets).
