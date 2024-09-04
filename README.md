@@ -16,4 +16,6 @@ Fun7 CTS backend service.
 
 4. Every merge/commit to master should also automatically deploy a new version of CTS.
 
-    Instead of master, the GitHub's default main is used here.
+    Instead of master, the GitHub's default main is used here. Whenever a pull request is merged (or a commit is pushed) to main a commit is created spinning up the _Terraform Provision_ workflow. It will plan and apply any infrastructure change. It will also generate a random UUID which will be used for the Cloud run resource revision number, effectively redeploying them and refreshing their cache to always use the newest tagged `latest` image.
+
+    New versions of the CTS are dockerized and pushed as the tag `latest` when when a merge or commit is detected on main (otherwise tagging is omitted, and the commit's short SHA is used as a tag). The _Docker Image CI_ workflow authenticates to the GCP and pushes the image to the registry provided.
