@@ -16,19 +16,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Authenticate to GCR
-        env:
-          GCP_SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_ACTIONS_SECRET_B64 }}
-        run: |
-          echo "${GCP_SERVICE_ACCOUNT_KEY}" | base64 --decode > /tmp/gcp-key.json
-          gcloud auth activate-service-account --key-file=/tmp/gcp-key.json
-          gcloud --quiet auth configure-docker
-          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-
       - name: Build Docker image
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
-          docker build -t europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts:${SHORT_COMMIT_SHA} .
+          docker build -t europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:${SHORT_COMMIT_SHA} .
 
       - name: Docker Login
         env:
@@ -39,8 +30,4 @@ jobs:
       - name: Push Docker image
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
-          docker push europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts:${SHORT_COMMIT_SHA}
-      
-      - name: Cleanup
-        if: always()
-        run: rm /tmp/gcp-key.json
+          docker push europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:${SHORT_COMMIT_SHA}
