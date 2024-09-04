@@ -41,6 +41,14 @@ resource "google_cloud_run_v2_service" "cts_north_america" {
   }
 }
 
+resource "google_cloud_run_service_iam_binding" "cts_north_america_invoker" {
+  location = google_cloud_run_v2_service.cts_north_america.location
+  project  = google_cloud_run_v2_service.cts_north_america.project
+  service  = google_cloud_run_v2_service.cts_north_america.name
+  role     = "roles/run.invoker"
+  members  = ["allUsers"]
+}
+
 resource "google_cloud_run_v2_service" "cts_asia" {
   name     = "cts-asia-service"
   location = "asia-east1"
@@ -56,6 +64,14 @@ resource "google_cloud_run_v2_service" "cts_asia" {
   }
 }
 
+resource "google_cloud_run_service_iam_binding" "cts_asia_invoker" {
+  location = google_cloud_run_v2_service.cts_asia.location
+  project  = google_cloud_run_v2_service.cts_asia.project
+  service  = google_cloud_run_v2_service.cts_asia.name
+  role     = "roles/run.invoker"
+  members  = ["allUsers"]
+}
+
 resource "google_cloud_run_v2_service" "cts_europe" {
   name     = "cts-europe-service"
   location = "europe-central2"
@@ -69,4 +85,12 @@ resource "google_cloud_run_v2_service" "cts_europe" {
       }
     }
   }
+}
+
+resource "google_cloud_run_service_iam_binding" "cts_europe_invoker" {
+  location = google_cloud_run_v2_service.cts_europe.location
+  project  = google_cloud_run_v2_service.cts_europe.project
+  service  = google_cloud_run_v2_service.cts_europe.name
+  role     = "roles/run.invoker"
+  members  = ["allUsers"]
 }
