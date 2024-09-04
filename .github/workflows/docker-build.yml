@@ -27,7 +27,17 @@ jobs:
         run: |
           echo "${GCP_SERVICE_ACCOUNT_KEY}" | docker login -u _json_key_base64 --password-stdin https://europe-central2-docker.pkg.dev
 
+      - name: Tag as latest if on main branch
+        if: github.ref == 'refs/heads/main'
+        run: |
+          SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
+          docker tag europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:${SHORT_COMMIT_SHA} \
+            europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest
+
       - name: Push Docker image
         run: |
           SHORT_COMMIT_SHA=$(git rev-parse --short ${{ github.sha }})
           docker push europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:${SHORT_COMMIT_SHA}
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            docker push europe-central2-docker.pkg.dev/compact-marker-434520-k0/fun7-cts-registry/fun7-cts:latest
+          fi

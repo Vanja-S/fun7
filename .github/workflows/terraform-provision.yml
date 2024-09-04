@@ -1,0 +1,66 @@
+name: Terraform Provision
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+
+env:
+  TF_LOG: INFO
+  TF_VAR_gcp_credentials: ${{ secrets.GCP_TERRAFORM_SECRET_B64}}
+
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.0
+     
+      - name: Authenticate to GCP
+        run: |
+          echo "${{ secrets.GCP_TERRAFORM_SECRET_B64 }}" | base64 --decode -i > "${HOME}/gcp_key.json"
+          gcloud auth activate-service-account --key-file="${HOME}/gcp_key.json"
+          gcloud config set project compact-marker-434520-k0
+        env:
+          GCP_TERRAFORM_SECRET_B64: ${{ secrets.GCP_TERRAFORM_SECRET_B64 }}
+  
+      - name: Download Terraform state file from GCS
+        run: |
+          gsutil cp gs://fun7_cts_terraform_state/terraform.tfstate ./terraform/terraform.tfstate
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${HOME}/gcp_key.json"
+
+      - name: Terraform init
+        run: |
+          cd terraform
+          terraform init
+   
+      - name: Terraform plan
+        run: |
+          cd terraform
+          terraform plan
+
+      - name: Terraform apply
+        run: |
+          cd terraform
+          terraform apply -auto-approve
+
+      - name: Upload updated tfstate file to GCS
+        run: |
+          gsutil cp ./terraform/terraform.tfstate gs://fun7_cts_terraform_state/terraform.tfstate
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: "${HOME}/gcp_key.json"
+
+      - name: Cleanup
+        if: always()
+        run: |  
+          rm -f "${HOME}/gcp_key.json"
+          rm -f ./terraform/terraform.tfstate
